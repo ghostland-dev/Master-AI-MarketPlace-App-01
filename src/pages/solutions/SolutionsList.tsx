@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import PageHeader from "@/components/PageHeader";
-import { Brain, Bot, Sparkles, Search, ChevronRight } from "lucide-react";
+import { Brain, Bot, Sparkles, Search, ChevronRight, Star, Users, Filter } from "lucide-react";
 
 const solutions = [
   {
@@ -13,7 +13,10 @@ const solutions = [
     description: "Advanced language model for content creation and analysis",
     icon: <Brain className="w-6 h-6" />,
     price: "$99",
-    category: "nlp"
+    category: "nlp",
+    rating: 4.8,
+    users: 1200,
+    tags: ["NLP", "Content Generation", "Analysis"]
   },
   {
     id: "computer-vision",
@@ -21,7 +24,10 @@ const solutions = [
     description: "Image recognition and processing solutions",
     icon: <Bot className="w-6 h-6" />,
     price: "$149",
-    category: "vision"
+    category: "vision",
+    rating: 4.6,
+    users: 850,
+    tags: ["Computer Vision", "Image Processing", "Recognition"]
   },
   {
     id: "predictive-analytics",
@@ -29,7 +35,10 @@ const solutions = [
     description: "AI-powered forecasting and data analysis",
     icon: <Sparkles className="w-6 h-6" />,
     price: "$199",
-    category: "analytics"
+    category: "analytics",
+    rating: 4.9,
+    users: 2300,
+    tags: ["Analytics", "Forecasting", "Business Intelligence"]
   }
 ];
 
@@ -43,17 +52,36 @@ const categories = [
 const SolutionsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const navigate = useNavigate();
 
+  const handleTagToggle = (tag: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag)
+        : [...prev, tag]
+    );
+  };
+
   const filteredSolutions = solutions.filter((solution) => {
-    const matchesSearch = solution.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = 
+      solution.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       solution.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "all" || solution.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesTags = 
+      selectedTags.length === 0 || 
+      selectedTags.some(tag => solution.tags.includes(tag));
+    
+    return matchesSearch && matchesCategory && matchesTags;
   });
 
+  // Get all unique tags
+  const allTags = Array.from(
+    new Set(solutions.flatMap(solution => solution.tags))
+  );
+
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 animate-fade-in">
       <PageHeader
         title="AI Solutions"
         description="Browse our collection of cutting-edge AI solutions"
@@ -72,32 +100,75 @@ const SolutionsList = () => {
         </div>
       </div>
 
-      <div className="flex gap-2 mb-8 flex-wrap justify-center">
-        {categories.map((category) => (
-          <Button
-            key={category.id}
-            variant={selectedCategory === category.id ? "default" : "outline"}
-            onClick={() => setSelectedCategory(category.id)}
-          >
-            {category.name}
-          </Button>
-        ))}
+      <div className="flex flex-wrap gap-4 mb-8 justify-center">
+        <div className="w-full flex flex-wrap gap-2 justify-center mb-4">
+          {categories.map((category) => (
+            <Button
+              key={category.id}
+              variant={selectedCategory === category.id ? "default" : "outline"}
+              onClick={() => setSelectedCategory(category.id)}
+              className="transition-all duration-300"
+            >
+              {category.name}
+            </Button>
+          ))}
+        </div>
+        
+        <div className="w-full flex flex-wrap gap-2 justify-center">
+          {allTags.map((tag) => (
+            <Button
+              key={tag}
+              variant={selectedTags.includes(tag) ? "secondary" : "outline"}
+              size="sm"
+              onClick={() => handleTagToggle(tag)}
+              className="transition-all duration-300"
+            >
+              {tag}
+            </Button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {filteredSolutions.map((solution) => (
-          <Card key={solution.id} className="p-6 hover:shadow-lg transition-shadow">
-            <div className="mb-4 text-primary">{solution.icon}</div>
+          <Card key={solution.id} className="group p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="mb-4 text-primary p-3 bg-primary/5 rounded-full w-fit">
+              {solution.icon}
+            </div>
             <h3 className="text-xl font-semibold mb-2">{solution.title}</h3>
             <p className="text-gray-600 mb-4">{solution.description}</p>
-            <div className="flex justify-between items-center">
+            
+            <div className="flex flex-wrap gap-2 mb-4">
+              {solution.tags.map((tag) => (
+                <span 
+                  key={tag}
+                  className="text-xs px-2 py-1 rounded-full bg-secondary/10 text-secondary"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+              <div className="flex items-center">
+                <Star className="w-4 h-4 text-yellow-400 mr-1" />
+                {solution.rating}
+              </div>
+              <div className="flex items-center">
+                <Users className="w-4 h-4 mr-1" />
+                {solution.users.toLocaleString()} users
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center mt-4">
               <span className="text-2xl font-bold text-primary">{solution.price}</span>
               <Button 
                 variant="outline" 
-                className="hover:bg-primary hover:text-white"
+                className="group-hover:bg-primary group-hover:text-white transition-colors"
                 onClick={() => navigate(`/solutions/${solution.id}`)}
               >
-                Learn More <ChevronRight className="w-4 h-4 ml-2" />
+                Learn More 
+                <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
           </Card>
