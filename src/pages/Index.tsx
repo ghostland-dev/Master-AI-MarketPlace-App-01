@@ -2,6 +2,7 @@ import { Brain, Bot, Sparkles, Search, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const solutions = [
   {
+    id: "text-generation",
     title: "Text Generation AI",
     description: "Advanced language model for content creation and analysis",
     icon: <Brain className="w-6 h-6" />,
@@ -22,6 +24,7 @@ const solutions = [
     category: "nlp"
   },
   {
+    id: "computer-vision",
     title: "Computer Vision Suite",
     description: "Image recognition and processing solutions",
     icon: <Bot className="w-6 h-6" />,
@@ -29,69 +32,41 @@ const solutions = [
     category: "vision"
   },
   {
+    id: "predictive-analytics",
     title: "Predictive Analytics",
     description: "AI-powered forecasting and data analysis",
     icon: <Sparkles className="w-6 h-6" />,
     price: "$199",
     category: "analytics"
-  },
-];
-
-const categories = [
-  { id: "all", name: "All Solutions" },
-  { id: "nlp", name: "Natural Language Processing" },
-  { id: "vision", name: "Computer Vision" },
-  { id: "analytics", name: "Analytics" },
+  }
 ];
 
 const Index = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const navigate = useNavigate();
   const { toast } = useToast();
 
-  const filteredSolutions = solutions.filter((solution) => {
-    const matchesSearch = solution.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      solution.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || solution.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
   const handleGetStarted = () => {
+    navigate("/solutions");
     toast({
       title: "Welcome!",
-      description: "Thanks for your interest. We'll guide you through the process.",
+      description: "Browse our collection of AI solutions.",
     });
   };
 
-  const handleLearnMore = () => {
-    toast({
-      title: "More Information",
-      description: "Detailed documentation and guides are coming soon.",
-    });
+  const handleLearnMore = (id: string) => {
+    navigate(`/solutions/${id}`);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5">
-      {/* Navigation */}
       <nav className="border-b bg-white/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid gap-3 p-6 w-[400px]">
-                    {categories.map((category) => (
-                      <NavigationMenuLink
-                        key={category.id}
-                        className="cursor-pointer block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        onClick={() => setSelectedCategory(category.id)}
-                      >
-                        <div className="text-sm font-medium leading-none">{category.name}</div>
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
+                <NavigationMenuTrigger onClick={() => navigate("/solutions")}>
+                  Solutions
+                </NavigationMenuTrigger>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Developers</NavigationMenuTrigger>
@@ -111,7 +86,6 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="container mx-auto px-4 py-24 text-center">
         <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-6">
           AI Solutions Marketplace
@@ -119,32 +93,19 @@ const Index = () => {
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
           Discover and integrate cutting-edge AI solutions to transform your business. Access pre-trained models, APIs, and custom solutions.
         </p>
-        <div className="flex flex-col md:flex-row gap-4 justify-center items-center max-w-xl mx-auto">
-          <div className="relative flex-1 w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              type="search"
-              placeholder="Search AI solutions..."
-              className="pl-10"
-              value={searchQuery}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <Button 
-            className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg rounded-full"
-            onClick={handleGetStarted}
-          >
-            Explore Solutions
-          </Button>
-        </div>
+        <Button 
+          className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg rounded-full"
+          onClick={handleGetStarted}
+        >
+          Explore Solutions
+        </Button>
       </section>
 
-      {/* Featured Solutions */}
       <section className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center mb-12">Featured Solutions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {filteredSolutions.map((solution, index) => (
-            <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+          {solutions.map((solution) => (
+            <Card key={solution.id} className="p-6 hover:shadow-lg transition-shadow">
               <div className="mb-4 text-primary">{solution.icon}</div>
               <h3 className="text-xl font-semibold mb-2">{solution.title}</h3>
               <p className="text-gray-600 mb-4">{solution.description}</p>
@@ -153,7 +114,7 @@ const Index = () => {
                 <Button 
                   variant="outline" 
                   className="hover:bg-primary hover:text-white"
-                  onClick={handleLearnMore}
+                  onClick={() => handleLearnMore(solution.id)}
                 >
                   Learn More <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -163,7 +124,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
       <section className="container mx-auto px-4 py-24 text-center">
         <div className="bg-gradient-to-r from-primary to-secondary p-12 rounded-2xl text-white">
           <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Business?</h2>
@@ -179,14 +139,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-white/50 backdrop-blur-sm border-t mt-24">
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="font-semibold mb-4">Solutions</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-600 hover:text-primary">All Solutions</a></li>
+                <li><a href="/solutions" className="text-gray-600 hover:text-primary">All Solutions</a></li>
                 <li><a href="#" className="text-gray-600 hover:text-primary">Featured</a></li>
                 <li><a href="#" className="text-gray-600 hover:text-primary">Pricing</a></li>
               </ul>
