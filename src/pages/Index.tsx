@@ -10,7 +10,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const solutions = [
   {
@@ -46,6 +47,7 @@ const categories = [
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const { toast } = useToast();
 
   const filteredSolutions = solutions.filter((solution) => {
     const matchesSearch = solution.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,10 +56,24 @@ const Index = () => {
     return matchesSearch && matchesCategory;
   });
 
+  const handleGetStarted = () => {
+    toast({
+      title: "Welcome!",
+      description: "Thanks for your interest. We'll guide you through the process.",
+    });
+  };
+
+  const handleLearnMore = () => {
+    toast({
+      title: "More Information",
+      description: "Detailed documentation and guides are coming soon.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5">
       {/* Navigation */}
-      <nav className="border-b bg-white/50 backdrop-blur-sm">
+      <nav className="border-b bg-white/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <NavigationMenu>
             <NavigationMenuList>
@@ -104,15 +120,20 @@ const Index = () => {
           Discover and integrate cutting-edge AI solutions to transform your business. Access pre-trained models, APIs, and custom solutions.
         </p>
         <div className="flex flex-col md:flex-row gap-4 justify-center items-center max-w-xl mx-auto">
-          <Input
-            type="search"
-            placeholder="Search AI solutions..."
-            className="flex-1"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            icon={<Search className="w-4 h-4" />}
-          />
-          <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg rounded-full">
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              type="search"
+              placeholder="Search AI solutions..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <Button 
+            className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg rounded-full"
+            onClick={handleGetStarted}
+          >
             Explore Solutions
           </Button>
         </div>
@@ -129,7 +150,11 @@ const Index = () => {
               <p className="text-gray-600 mb-4">{solution.description}</p>
               <div className="flex justify-between items-center">
                 <span className="text-2xl font-bold text-primary">{solution.price}</span>
-                <Button variant="outline" className="hover:bg-primary hover:text-white">
+                <Button 
+                  variant="outline" 
+                  className="hover:bg-primary hover:text-white"
+                  onClick={handleLearnMore}
+                >
                   Learn More <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
@@ -145,7 +170,10 @@ const Index = () => {
           <p className="mb-8 text-lg opacity-90">
             Join thousands of businesses leveraging AI solutions for growth
           </p>
-          <Button className="bg-white text-primary hover:bg-white/90 px-8 py-6 text-lg rounded-full">
+          <Button 
+            className="bg-white text-primary hover:bg-white/90 px-8 py-6 text-lg rounded-full"
+            onClick={handleGetStarted}
+          >
             Get Started Today
           </Button>
         </div>
