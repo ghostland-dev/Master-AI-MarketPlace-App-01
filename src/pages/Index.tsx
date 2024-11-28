@@ -1,4 +1,4 @@
-import { Brain, Robot, Sparkles } from "lucide-react";
+import { Brain, Bot, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -12,7 +12,7 @@ const solutions = [
   {
     title: "Computer Vision Suite",
     description: "Image recognition and processing solutions",
-    icon: <Robot className="w-6 h-6" />,
+    icon: <Bot className="w-6 h-6" />,
     price: "$149",
   },
   {
