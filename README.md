@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Welcome to  AI Marketplace for selling and buying AI models
 
 ## Project info
  
