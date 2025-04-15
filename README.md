@@ -1,53 +1,58 @@
-# Welcome to  AI Marketplace for selling and buying AI models
-
-## Project info
+# AI Solutions Marketplace
+![alt text](image.png)
  
-There are several ways of editing your application.
+Bienvenue sur **AI Solutions**, une plateforme web moderne pour explorer, filtrer et découvrir les meilleures solutions d'intelligence artificielle du marché.
 
-**Use your preferred IDE**
+## 🌐 Aperçu du Projet
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Cette application propose une interface fluide et intuitive permettant de :
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Parcourir un catalogue de solutions IA classées par domaine (NLP, Computer Vision, Analytics, etc.)
+- Rechercher dynamiquement des solutions avec un moteur de recherche intégré
+- Filtrer par catégories grâce à des tags intelligents
+- Découvrir les caractéristiques de chaque produit : prix, rating, nombre d'utilisateurs, etc.
 
-Follow these steps:
+## 🖼️ Aperçu de l’Interface
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+![Aperçu UI](./e423f073-e44d-496f-9f82-3b798a5c70b4.png)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🧑‍💻 Développeur
 
-# Step 3: Install the necessary dependencies.
-npm i
+Projet développé par :  
+**Ismail MOUAYAHDA**  
+📧 ismail.mouayahda@gmail.com
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## ⚙️ Stack Technique
+
+- **Frontend** : React + Tailwind CSS + Lucide React
+- **Design** : Composants réutilisables, responsive, light UI
+- **Backend** : (À intégrer ou connecter à une API)
+- **Langage** : Anglais
+
+## 🛠️ Installation
+
+```bash
+# Clone du dépôt
+git clone https://github.com/ton-compte/ai-solutions-marketplace.git
+cd ai-solutions-marketplace
+
+# Installation des dépendances
+npm install
+
+# Lancer le projet
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 📌 À faire / Améliorations futures
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- [ ] Connexion API dynamique pour afficher les vraies données
+- [ ] Authentification utilisateur
+- [ ] Système de notation/commentaires
+- [ ] Paiement intégré (Stripe / PayPal)
+- [ ] Dashboard admin pour la gestion des solutions IA
 
-**Use GitHub Codespaces**
+## 📄 Licence
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
+Projet sous licence MIT – voir [LICENSE](./LICENSE).
+```
  
